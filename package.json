@@ -3,19 +3,21 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
-    "format": "prettier --write src/"
+    "dev": "vite",
+    "format": "prettier --write src/",
+    "preview": "vite preview"
   },
   "dependencies": {
     "vue": "^3.2.47",
-    "vue-router": "^4.1.6"
+    "vue-router": "^4.1.6",
+    "vuex": "^4.0.0"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.2.0",
     "@vitejs/plugin-vue": "^4.0.0",
+    "@vue/cli-plugin-vuex": "~5.0.0",
     "@vue/eslint-config-prettier": "^7.1.0",
     "autoprefixer": "^10.4.14",
     "eslint": "^8.34.0",
