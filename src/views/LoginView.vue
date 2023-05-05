@@ -38,9 +38,10 @@
             </div>
 
             <div class="flex mt-5 items-center justify-between">
-              <a href="#" class="text-sm text-white font-medium text-primary-600 hover:underline dark:text-primary-500">
+              <RouterLink :to="{ name: 'forgotPassword' }"
+                class="text-sm text-white font-medium text-primary-600 hover:underline dark:text-primary-500">
                 Esqueceu a senha?
-              </a>
+              </RouterLink>
             </div>
 
             <button type="submit" :disabled="spinner.login"

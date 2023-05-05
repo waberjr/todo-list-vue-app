@@ -22,6 +22,11 @@ const router = createRouter({
       path: '/verificar-email',
       name: 'verifyEmail',
       component: () => import('../views/VerifyEmailView.vue')
+    },
+    {
+      path: '/esqueci-senha',
+      name: 'forgotPassword',
+      component: () => import('../views/ForgotPasswordView.vue')
     }
   ]
 })
