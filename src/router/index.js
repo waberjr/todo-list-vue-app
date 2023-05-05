@@ -1,4 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import HomeView from '@/views/HomeView.vue';
+import AuthView from '@/views/auth/LoginView.vue';
+import RegisterView from '@/views/auth/RegisterView.vue';
+import VerifyEmailView from '@/views/auth/VerifyEmailView.vue';
+import ForgotPasswordView from '@/views/auth/ForgotPasswordView.vue';
+import ResetPasswordView from '@/views/auth/ResetPasswordView.vue';
+import Guard from '../service/middleware';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -6,32 +13,38 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: () => import('../views/HomeView.vue')
+      component: HomeView,
+      beforeEnter: Guard.redirectIfNotAuthenticated
     },
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue')
+      component: AuthView,
+      beforeEnter: Guard.redirectIfAuthenticated
     },
     {
       path: '/cadastrar',
       name: 'register',
-      component: () => import('../views/RegisterView.vue')
+      component: RegisterView,
+      beforeEnter: Guard.redirectIfAuthenticated
     },
     {
       path: '/verificar-email',
       name: 'verifyEmail',
-      component: () => import('../views/VerifyEmailView.vue')
+      component: VerifyEmailView,
+      beforeEnter: Guard.redirectIfAuthenticated
     },
     {
       path: '/esqueci-senha',
       name: 'forgotPassword',
-      component: () => import('../views/ForgotPasswordView.vue')
+      component: ForgotPasswordView,
+      beforeEnter: Guard.redirectIfAuthenticated
     },
     {
       path: '/recuperar-senha',
       name: 'resetPassword',
-      component: () => import('../views/ResetPasswordView.vue')
+      component: ResetPasswordView,
+      beforeEnter: Guard.redirectIfAuthenticated
     }
   ]
 })

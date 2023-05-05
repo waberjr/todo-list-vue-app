@@ -61,10 +61,10 @@
 </template>
 
 <script>
-import Cookie from 'js-cookie';
 import { Form as FormVue, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
 import message from '@/utils/messages';
+import Cookie from "@/service/cookie.js";
 
 export default {
   components: {
@@ -101,8 +101,8 @@ export default {
 
       this.$axios.post('/login', payload)
         .then((response) => {
-          const token = `${response.data.token_type} ${response.data.access_token}`
-          Cookie.set('_todoList_token', token, { expires: 30 });
+          const token = `${response.data.token_type} ${response.data.access_token}`;
+          Cookie.setToken(token);
 
           this.$store.commit('user/STORE_USER', response.data.data)
         })
