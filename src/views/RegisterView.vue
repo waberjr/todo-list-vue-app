@@ -10,16 +10,36 @@
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h1
             class="text-xl flex flex-col items-center font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-            Faça login em sua conta
+            Cadastre-se
           </h1>
 
           <div v-if="response.message" :class="`rounded-sm flex flex-col items-center dark:bg-${response.color}-300`">
             <h3 :class="`text-${response.color}-500`">{{ response.message }}</h3>
           </div>
 
-          <FormVue @submit="login" :validation-schema="loginFormValidation">
+          <FormVue @submit="register" ref="registerForm" :validation-schema="registerFormValidation">
             <div>
-              <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seu e-mail</label>
+              <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nome</label>
+              <Field @keyup="resetResponse" type="text" id="first_name" name="first_name" v-model="first_name"
+                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="...">
+              </Field>
+              <ErrorMessage class="text-red-500" name="first_name"></ErrorMessage>
+            </div>
+
+            <div>
+              <label for="last_name"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-3">Sobrenome</label>
+              <Field @keyup="resetResponse" type="text" id="last_name" name="last_name" v-model="last_name"
+                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="...">
+              </Field>
+              <ErrorMessage class="text-red-500" name="last_name"></ErrorMessage>
+            </div>
+
+            <div>
+              <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white mt-3">Seu
+                e-mail</label>
               <Field @keyup="resetResponse" type="email" id="email" name="email" v-model="email"
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="name@company.com">
@@ -37,21 +57,13 @@
               <ErrorMessage class="text-red-500" name="password"></ErrorMessage>
             </div>
 
-            <div class="flex mt-5 items-center justify-between">
-              <a href="#" class="text-sm text-white font-medium text-primary-600 hover:underline dark:text-primary-500">
-                Esqueceu a senha?
-              </a>
-            </div>
 
-            <button type="submit" :disabled="spinner.login"
+            <button type="submit" :disabled="spinner.register"
               class="w-full mt-3 mb-3 text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-              {{ spinner.login ? 'Carregando...' : 'Entrar' }}
+              {{ spinner.register ? 'Carregando...' : 'Cadastrar' }}
             </button>
 
-            <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-              Não tem uma conta ainda? <RouterLink :to="{ name: 'register' }" class="font-medium text-primary-600
-                hover:underline dark:text-primary-500">Cadastre-se</RouterLink>
-            </p>
+            <button type="reset" class="hidden"></button>
           </FormVue>
         </div>
       </div>
@@ -60,7 +72,6 @@
 </template>
 
 <script>
-import Cookie from 'js-cookie';
 import { Form as FormVue, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
 import message from '@/utils/messages';
@@ -73,9 +84,13 @@ export default {
   },
   data() {
     return {
+      first_name: '',
+      last_name: '',
       email: '',
       password: '',
-      loginFormValidation: yup.object({
+      registerFormValidation: yup.object({
+        first_name: yup.string().required(),
+        last_name: yup.string(),
         email: yup.string().required().email(),
         password: yup.string().required()
       }),
@@ -84,26 +99,28 @@ export default {
         message: ''
       },
       spinner: {
-        login: false,
+        register: false,
       }
     }
   },
   methods: {
-    login() {
+    register(values, formActions) {
       const payload = {
+        first_name: this.first_name,
+        last_name: this.last_name,
         email: this.email,
         password: this.password
       };
 
       this.resetResponse();
-      this.spinner.login = true;
+      this.spinner.register = true;
 
-      this.$axios.post('/login', payload)
-        .then((response) => {
-          const token = `${response.data.token_type} ${response.data.access_token}`
-          Cookie.set('_todoList_token', token, { expires: 30 });
+      this.$axios.post('/register', payload)
+        .then(() => {
+          this.response.color = 'green';
+          this.response.message = 'Seu cadastro foi feito com sucesso!';
 
-          this.$store.commit('user/STORE_USER', response.data.data)
+          formActions.resetForm();
         })
         .catch((error) => {
           const errorCode = error?.response?.data?.error || 'ServerError';
@@ -112,14 +129,14 @@ export default {
           this.response.message = message[errorCode]
         })
         .finally(() => {
-          this.spinner.login = false;
+          this.spinner.register = false;
         })
     },
 
     resetResponse() {
       this.response.color = '';
       this.response.message = '';
-    }
+    },
   },
 }
 </script>
