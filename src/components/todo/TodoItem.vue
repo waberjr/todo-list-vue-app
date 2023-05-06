@@ -13,14 +13,16 @@
                 </button>
             </div>
 
+
             <div class="w-full">
-                <input type="text" placeholder="Digite a sua tarefa" v-model="title" @keyup.enter="onTitleChange"
+                <input type="text" placeholder="Digite a sua tarefa" v-model="label" @keyup.enter="onTitleChange"
                     class="bg-gray-300 placeholder-gray-500 
                                                                                                           text-gray-700 font-light focus:outline-none block w-full appearance-none 
                                                                                                           leading-normal mr-3">
             </div>
 
-            <div class="ml-auto flex items-center 
+            <div
+                class="ml-auto flex items-center 
                                                                                                           justify-center">
                 <button @click="onDelete" class="focus:outline-none">
                     <svg class="ml-3 h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -48,39 +50,39 @@ export default {
     },
     data() {
         return {
-            title: this.todo.title,
+            label: this.todo.label,
             isCompleted: this.todo.completed
         }
     },
     methods: {
-        updateTodo() {
-            const playload = {
-                id: this.todo.id,
-                data: {
-                    title: this.title,
-                    completed: this.isCompleted
-                }
-            }
+        // updateTodo() {
+        //     const playload = {
+        //         id: this.todo.id,
+        //         data: {
+        //             title: this.title,
+        //             completed: this.isCompleted
+        //         }
+        //     }
 
-            this.$store.dispatch('updateTodo', playload);
-        },
+        //     this.$store.dispatch('updateTodo', playload);
+        // },
 
-        onTitleChange($evt) {
-            if (!this.title) {
-                return;
-            }
+        // onTitleChange($evt) {
+        //     if (!this.title) {
+        //         return;
+        //     }
 
-            this.updateTodo();
-        },
+        //     this.updateTodo();
+        // },
 
-        onCheckClick() {
-            this.isCompleted = !this.isCompleted;
-            this.updateTodo()
-        },
+        // onCheckClick() {
+        //     this.isCompleted = !this.isCompleted;
+        //     this.updateTodo()
+        // },
 
-        onDelete() {
-            this.$store.dispatch('deleteTodo', this.todo.id);
-        }
+        // onDelete() {
+        //     this.$store.dispatch('deleteTodo', this.todo.id);
+        // }
     },
 }
 </script>

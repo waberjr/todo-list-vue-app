@@ -70,8 +70,6 @@
               <Spinner v-if="spinner.register"></Spinner>
               <span v-else>Cadastrar</span>
             </button>
-
-            <button type="reset" class="hidden"></button>
           </FormVue>
         </div>
       </div>
