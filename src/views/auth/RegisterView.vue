@@ -1,6 +1,6 @@
 <template>
-  <section class="bg-gray-50 dark:bg-gray-900">
-    <div class="flex flex-col items-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+  <section>
+    <div class="flex flex-col items-center px-6 py-8 mx-auto lg:py-0">
       <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
         <img class="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo">
         MyTodo
@@ -13,11 +13,18 @@
             Cadastre-se
           </h1>
 
-          <div v-if="response.message" :class="`rounded-sm flex flex-col items-center dark:bg-${response.color}-300`">
+          <div v-if="response.message" :class="`rounded-sm flex flex-col items-center`">
             <h3 :class="`text-${response.color}-500`">{{ response.message }}</h3>
           </div>
 
-          <FormVue @submit="register" ref="registerForm" :validation-schema="registerFormValidation">
+          <div v-if="success" :class="`flex flex-col items-center`">
+            <RouterLink :to="{ name: 'login' }"
+              class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+              <h3>Clique aqui para fazer Login!</h3>
+            </RouterLink>
+          </div>
+
+          <FormVue @submit="register" ref="registerForm" :validation-schema="registerFormValidation" v-if="!success">
             <div>
               <label for="first_name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Nome</label>
               <Field @keyup="resetResponse" type="text" id="first_name" name="first_name" v-model="first_name"
@@ -88,6 +95,7 @@ export default {
       last_name: '',
       email: '',
       password: '',
+      success: false,
       registerFormValidation: yup.object({
         first_name: yup.string().required(),
         last_name: yup.string(),
@@ -119,6 +127,7 @@ export default {
         .then(() => {
           this.response.color = 'green';
           this.response.message = 'Seu cadastro foi feito com sucesso!';
+          this.success = true;
 
           formActions.resetForm();
         })

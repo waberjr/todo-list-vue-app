@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/views/HomeView.vue';
+import ProfileView from '@/views/ProfileView.vue';
 import AuthView from '@/views/auth/LoginView.vue';
 import RegisterView from '@/views/auth/RegisterView.vue';
 import VerifyEmailView from '@/views/auth/VerifyEmailView.vue';
@@ -12,9 +13,11 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: HomeView,
-      beforeEnter: Guard.redirectIfNotAuthenticated
+      beforeEnter: Guard.redirectIfNotAuthenticated,
+      children: [
+        { path: '/', name: 'home', component: HomeView },
+        { path: '/perfil', name: 'profile', component: ProfileView }
+      ]
     },
     {
       path: '/login',

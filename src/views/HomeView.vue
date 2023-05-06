@@ -1,5 +1,5 @@
 <template>
-  <main>
-    Teste
-  </main>
+  <section>
+    Home
+  </section>
 </template>

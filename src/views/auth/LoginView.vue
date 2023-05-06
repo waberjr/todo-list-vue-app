@@ -1,6 +1,6 @@
 <template>
-  <section class="bg-gray-50 dark:bg-gray-900">
-    <div class="flex flex-col items-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+  <section>
+    <div class="flex flex-col items-center px-6 py-8 mx-auto lg:py-0">
       <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
         <img class="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo">
         MyTodo
@@ -13,7 +13,7 @@
             Faça login em sua conta
           </h1>
 
-          <div v-if="response.message" :class="`rounded-sm flex flex-col items-center dark:bg-${response.color}-300`">
+          <div v-if="response.message" :class="`rounded-sm flex flex-col items-center`">
             <h3 :class="`text-${response.color}-500`">{{ response.message }}</h3>
           </div>
 
@@ -104,7 +104,9 @@ export default {
           const token = `${response.data.token_type} ${response.data.access_token}`;
           Cookie.setToken(token);
 
-          this.$store.commit('user/STORE_USER', response.data.data)
+          this.$store.commit('user/STORE_USER', response.data.data);
+
+          this.$router.push({ name: 'home' })
         })
         .catch((error) => {
           const errorCode = error?.response?.data?.error || 'ServerError';

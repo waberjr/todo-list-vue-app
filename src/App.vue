@@ -4,9 +4,9 @@ import PrincipalHeader from './components/PrincipalHeader.vue';
 </script>
 
 <template>
-  <PrincipalHeader></PrincipalHeader>
+  <section class="bg-gray-50 dark:bg-gray-900 md:h-screen">
+    <PrincipalHeader></PrincipalHeader>
 
-  <RouterView />
+    <RouterView />
+  </section>
 </template>
-
-<style scoped></style>
