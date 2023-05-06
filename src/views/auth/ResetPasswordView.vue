@@ -40,7 +40,8 @@
 
             <button type="submit" :disabled="spinner.resetPassword"
               class="w-full mt-3 text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-              {{ spinner.resetPassword ? 'Carregando...' : 'Alterar senha' }}
+              <Spinner v-if="spinner.resetPassword"></Spinner>
+              <span v-else>Alterar senha</span>
             </button>
           </FormVue>
 
@@ -58,12 +59,14 @@
 import { Form as FormVue, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
 import message from '@/utils/messages';
+import Spinner from '@/components/Spinner.vue';
 
 export default {
   components: {
     FormVue,
     Field,
-    ErrorMessage
+    ErrorMessage,
+    Spinner
   },
   data() {
     return {

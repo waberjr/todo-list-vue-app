@@ -67,7 +67,8 @@
 
             <button type="submit" :disabled="spinner.register"
               class="w-full mt-3 mb-3 text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-              {{ spinner.register ? 'Carregando...' : 'Cadastrar' }}
+              <Spinner v-if="spinner.register"></Spinner>
+              <span v-else>Cadastrar</span>
             </button>
 
             <button type="reset" class="hidden"></button>
@@ -82,12 +83,14 @@
 import { Form as FormVue, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
 import message from '@/utils/messages';
+import Spinner from '@/components/Spinner.vue';
 
 export default {
   components: {
     FormVue,
     Field,
-    ErrorMessage
+    ErrorMessage,
+    Spinner
   },
   data() {
     return {

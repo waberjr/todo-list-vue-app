@@ -18,7 +18,14 @@
             <h3 :class="`text-${response.color}-500`">{{ response.message }}</h3>
           </div>
 
-          <FormVue @submit="forgotPassword" :validation-schema="forgotPasswordFormValidation">
+          <div v-if="success" :class="`flex flex-col items-center`">
+            <RouterLink :to="{ name: 'login' }"
+              class="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+              <h3>Clique aqui para fazer Login!</h3>
+            </RouterLink>
+          </div>
+
+          <FormVue @submit="forgotPassword" :validation-schema="forgotPasswordFormValidation" v-if="!success">
             <div>
               <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seu e-mail</label>
               <Field @keyup="resetResponse" type="email" id="email" name="email" v-model="email"
@@ -30,7 +37,9 @@
 
             <button type="submit" :disabled="spinner.forgotPassword"
               class="w-full mt-3 text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
-              {{ spinner.forgotPassword ? 'Carregando...' : 'Recuperar senha' }}
+              <!-- {{ spinner.forgotPassword ? 'Carregando...' : 'Recuperar senha' }} -->
+              <Spinner v-if="spinner.forgotPassword"></Spinner>
+              <span v-else>Recuperar senha</span>
             </button>
           </FormVue>
         </div>
@@ -43,16 +52,19 @@
 import { Form as FormVue, Field, ErrorMessage } from 'vee-validate';
 import * as yup from 'yup';
 import message from '@/utils/messages';
+import Spinner from '@/components/Spinner.vue';
 
 export default {
   components: {
     FormVue,
     Field,
-    ErrorMessage
+    ErrorMessage,
+    Spinner
   },
   data() {
     return {
       email: '',
+      success: false,
       forgotPasswordFormValidation: yup.object({
         email: yup.string().required().email(),
       }),
@@ -74,6 +86,7 @@ export default {
         .then(() => {
           this.response.color = 'green';
           this.response.message = 'Enviamos um e-mail com instruções de recuperação de senha.';
+          this.success = true;
         })
         .catch((error) => {
           const errorCode = error?.response?.data?.error || 'ServerError';

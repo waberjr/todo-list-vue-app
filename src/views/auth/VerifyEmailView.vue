@@ -11,7 +11,7 @@
 
           <div v-if="spinner.verifyEmail"
             class="text-xl flex flex-col items-center text-center font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-            <h3>Carregando...</h3>
+            <Spinner></Spinner>
           </div>
 
           <div v-if="response.message" :class="`rounded-sm flex flex-col items-center`">
@@ -25,8 +25,12 @@
 
 <script>
 import message from '@/utils/messages';
+import Spinner from '@/components/Spinner.vue';
 
 export default {
+  components: {
+    Spinner,
+  },
   data() {
     return {
       token: '',
