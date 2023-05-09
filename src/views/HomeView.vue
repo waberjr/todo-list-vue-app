@@ -5,7 +5,7 @@
       <Spinner v-if="spinner.todos"></Spinner>
       <template v-else>
         <div v-if="!errorGettingTodos">
-          <TodoFormAdd></TodoFormAdd>
+          <TodoFormAdd @addTodoToArray="addTodoToArray"></TodoFormAdd>
 
           <TodoItems v-if="todos.length > 0" :todos="todos"></TodoItems>
           <TodoEmpty v-else-if="todos.length == 0"></TodoEmpty>
@@ -64,6 +64,10 @@ export default {
         .finally(() => {
           this.spinner.todos = false;
         })
+    },
+
+    addTodoToArray(data) {
+      this.todos.unshift(data);
     }
   },
 }
