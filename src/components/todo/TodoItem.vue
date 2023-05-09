@@ -21,10 +21,10 @@
                                                                                                           leading-normal mr-3">
             </div>
 
-            <!-- <div
-                class="ml-auto flex items-center 
-                                                                                                          justify-center">
-                <button @click="onDelete" class="focus:outline-none">
+            <div class="ml-auto flex items-center justify-center">
+                <Spinner v-if="spinner.deleteBtn"></Spinner>
+
+                <button v-else @click="destroyTodo" class="focus:outline-none">
                     <svg class="ml-3 h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                         xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -35,25 +35,38 @@
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                     </svg>
                 </button>
-            </div> -->
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+import Spinner from '@/components/Spinner.vue';
+
 export default {
+    components: {
+        Spinner,
+    },
+
     props: {
         todo: {
             type: Object,
             default: () => ({})
         }
     },
+
+    emits: ['removeTodoFromArray'],
+
     data() {
         return {
             id: this.todo.id,
-            label: this.todo.label
+            label: this.todo.label,
+            spinner: {
+                deleteBtn: false
+            }
         }
     },
+
     methods: {
         updateTodo() {
             if (!this.label) {
@@ -65,19 +78,25 @@ export default {
             }
 
             this.$axios.put(`/todos/${this.id}`, playload)
-                .then(() => {
-
+                .catch(() => {
+                    console.log('catch erro put');
                 });
         },
 
-        // onCheckClick() {
-        //     this.isCompleted = !this.isCompleted;
-        //     this.updateTodo()
-        // },
+        destroyTodo() {
+            this.spinner.deleteBtn = true;
 
-        // onDelete() {
-        //     this.$store.dispatch('deleteTodo', this.todo.id);
-        // }
+            this.$axios.delete(`/todos/${this.id}`)
+                .then(() => {
+                    this.$emit("removeTodoFromArray", this.id);
+                })
+                .catch(() => {
+                    console.log('catch erro delete');
+                })
+                .finally(() => {
+                    this.spinner.deleteBtn = false;
+                });
+        }
     },
 }
 </script>

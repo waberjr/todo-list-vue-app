@@ -1,7 +1,8 @@
 
 <template>
     <div class="space-y-2">
-        <TodoItem v-for="todo in todos" :key="todo.id" :todo="todo"></TodoItem>
+        <TodoItem v-for="todo in todosArr" :key="todo.id" :todo="todo" @removeTodoFromArray="removeTodoFromArray">
+        </TodoItem>
     </div>
 </template>
 
@@ -12,11 +13,26 @@ export default {
     components: {
         TodoItem
     },
+
     props: {
         todos: {
             type: Array,
             default: () => []
         },
-    }
+    },
+
+    data() {
+        return {
+            todosArr: this.todos
+        }
+    },
+
+    methods: {
+        removeTodoFromArray(id) {
+            const index = this.todosArr.findIndex(o => o.id === id);
+
+            this.todosArr.splice(index, 1);
+        }
+    },
 }
 </script>
